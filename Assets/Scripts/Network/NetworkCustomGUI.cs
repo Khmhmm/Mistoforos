@@ -10,6 +10,7 @@ public class NetworkCustomGUI : MonoBehaviour {
     float xOffset = MainmenuGUI.xOffset;
     float yOffset = MainmenuGUI.yOffset;
     bool action = false;
+    public string field = "localhost";
 
     void Start()
     {
@@ -35,9 +36,7 @@ public class NetworkCustomGUI : MonoBehaviour {
         }
 
         //CONNECT
-        var field = GUI.TextField(
-            new Rect(Screen.width - xOffset, 250f, xOffset - 10f, 20f), 
-            "localhost");
+        field = GUI.TextField(new Rect(Screen.width - xOffset, 250f, xOffset - 10f, 20f), field);
 
         if(GUI.Button(
             new Rect(Screen.width - xOffset*2f, 250f, xOffset - 10f, 20f),

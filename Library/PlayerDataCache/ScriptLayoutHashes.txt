@@ -147,7 +147,7 @@ bc68edb0af574bf79f9550ead8ebae5c UnityEngine.HoloLens.dll:UnityEngine.Audio.Audi
 c2275a8bfbb9f9942cad75ecdfded41d UnityEngine.HoloLens.dll:UnityEngine.XR.WSA.SpatialMappingCollider
 45f3431f0103c41611e8d4eec3d439df UnityEngine.HoloLens.dll:UnityEngine.XR.WSA.SpatialMappingRenderer
 9de3a22eca9aefadba2d10d5987cefe3 UnityEngine.SpatialTracking.dll:UnityEngine.SpatialTracking.TrackedPoseDriver
-bd038eb764670475c5a5fabc84d861c5 Assembly-CSharp.dll:.NetworkCustomGUI
+52397eac231b1ef027c642b0304cbb51 Assembly-CSharp.dll:.NetworkCustomGUI
 492f6308468ef7da278e627cc85aa38c Assembly-CSharp.dll:.MainmenuGUI
 5a1705081c5537e0cea118769457bc15 Assembly-CSharp.dll:.UserScript
-b502606368b3296f69b27ab728828160 Assembly-CSharp.dll:.LobbyHandler
+5eacc6d8f217c9d05e32e6af17f5241d Assembly-CSharp.dll:.LobbyHandler

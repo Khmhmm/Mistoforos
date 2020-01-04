@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -48,7 +49,11 @@ public class LobbyHandler : MonoBehaviour {
         //TODO: optimize
         for (int i = 0; i < players.Count; i++)
         {
-            GUI.Label(new Rect(Screen.width - xOffset, Screen.height *0.1f + yOffset + i*20f, Screen.width*0.1f,40f), players[i].GetComponent<UserScript>().userName);
+            try
+            {
+                GUI.Label(new Rect(Screen.width - xOffset, Screen.height * 0.1f + yOffset + i * 20f, Screen.width * 0.1f, 40f), players[i].GetComponent<UserScript>().userName);
+            }
+            catch(Exception e) { players.RemoveAt(i); Debug.LogError(e); }
         }
     }
 }
