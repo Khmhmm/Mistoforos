@@ -141,7 +141,7 @@ MonoBehaviour:
   m_Script: {fileID: -822479833, guid: 870353891bb340e2b2a9c8707e7419ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_NetworkPort: 7777
+  m_NetworkPort: 7070
   m_ServerBindToIP: 0
   m_ServerBindAddress: 
   m_NetworkAddress: localhost
@@ -155,7 +155,7 @@ MonoBehaviour:
   m_AutoCreatePlayer: 1
   m_PlayerSpawnMethod: 0
   m_OfflineScene: 
-  m_OnlineScene: 
+  m_OnlineScene: Lobby
   m_SpawnPrefabs: []
   m_CustomConfig: 0
   m_MaxConnections: 4
@@ -233,13 +233,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 348164358}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 227461547, guid: 870353891bb340e2b2a9c8707e7419ba, type: 3}
+  m_Script: {fileID: 11500000, guid: 1ca6ded9e6f144442b5e58eddecdd815, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  manager: {fileID: 0}
-  showGUI: 1
-  offsetX: 0
-  offsetY: 0
+  network: {fileID: 0}
+  gskin: {fileID: 11400000, guid: c42314e1841bf684681d830b69798919, type: 2}
 --- !u!1 &1163246324
 GameObject:
   m_ObjectHideFlags: 0

@@ -51,7 +51,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\Main menu\MainmenuGUI.cs" />
+     <Compile Include="Assets\Scripts\Network\LobbyHandler.cs" />
      <Compile Include="Assets\Scripts\Network\NetworkCustomGUI.cs" />
+     <Compile Include="Assets\Scripts\Network\UserScript.cs" />
  <Reference Include="UnityEngine.CoreModule">
  <HintPath>C:/Program Files/Unity/Hub/Editor/2017.4.35f1/Editor/Data/Managed/UnityEngine/UnityEngine.CoreModule.dll</HintPath>
  </Reference>
