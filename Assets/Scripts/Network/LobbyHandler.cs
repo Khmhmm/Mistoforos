@@ -2,58 +2,87 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 
 public class LobbyHandler : MonoBehaviour {
     public GUISkin skin;
+    public GameObject playerPrefab;
     public List<GameObject> players;
-    public GameObject host = null;
     private static float xOffset = MainmenuGUI.xOffset, yOffset = MainmenuGUI.yOffset;
-    private static Rect rect = new Rect(Screen.width - xOffset, Screen.height * 0.1f, Screen.width * 0.1f, 40f);
+    public int count=0;
+    public GameObject sequence;
 
+    public UserScript lastUser;
+
+    public bool spawned = false;
     void Start()
     {
         InvokeRepeating("PlayersChecker", 0.5f, 1f);
-        InvokeRepeating("HostChecker",3f,5f);
+    }
+
+    void LateUpdate()
+    {
+
     }
 
     void PlayersChecker()
     {
         GameObject[] tmp = GameObject.FindGameObjectsWithTag("Player");
-        foreach(var player in tmp)
+        if (tmp.Length == 0)
         {
-            if (!players.Contains(player))
+            var player = Instantiate(playerPrefab, new Vector3(0f, 0f, 0f), Quaternion.Euler(0f, 0f, 0f));
+            CancelInvoke();
+            players.Add(player);
+        }
+        else
+        {
+            foreach (var player in tmp)
             {
-                players.Add(player);
+                if (!players.Contains(player))
+                {
+                    players.Add(player);
+                    count = 0;
+                    player.GetComponent<UserScript>().proverka = 100 + new System.Random().Next(1, 50);
+                    foreach(var clearClick in players)
+                    {
+                        clearClick.GetComponent<UserScript>().clicked = false;
+                    }
+                }
             }
         }
     }
 
-    void HostChecker()
-    {
-        if(!players[0].GetComponent<UserScript>().hosting && host==null)
-        {
-            //the first player is always host
-            players[0].GetComponent<UserScript>().hosting = true;
-            host = players[0];
-            CancelInvoke("HostChecker");
-            Debug.Log("Host has been found");
-        }
-    }
 
 
-    
+
     void OnGUI()
     {
-        GUI.skin = skin;
-        GUI.Label(rect, "Party: ");
-        //TODO: optimize
-        for (int i = 0; i < players.Count; i++)
+        if (spawned)
         {
-            try
+            return;
+        }
+        else
+        {
+            GUI.Label(new Rect(0f, Screen.height * 0.1f, Screen.width * 0.1f, Screen.height * 0.1f), count + "/" + players.Count);
+            GUI.skin = skin;
+            GUI.Label(new Rect(Screen.width - xOffset, Screen.height * 0.1f, Screen.width * 0.1f, 40f), "Party: ");
+            //TODO: optimize
+            for (int i = 0; i < players.Count; i++)
             {
-                GUI.Label(new Rect(Screen.width - xOffset, Screen.height * 0.1f + yOffset + i * 20f, Screen.width * 0.1f, 40f), players[i].GetComponent<UserScript>().userName);
+                try
+                {
+                    GUI.Label(new Rect(Screen.width - xOffset, Screen.height * 0.1f + yOffset + i * 20f, Screen.width * 0.1f, 40f), players[i].GetComponent<UserScript>().userName);
+                }
+                catch (Exception e) {
+                    players.RemoveAt(i);
+                    count = 0;
+                    foreach (var clearClick in players)
+                    {
+                        clearClick.GetComponent<UserScript>().clicked = false;
+                    }
+                }
             }
-            catch(Exception e) { players.RemoveAt(i); Debug.LogError(e); }
         }
     }
 }

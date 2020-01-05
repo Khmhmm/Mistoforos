@@ -52,8 +52,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b261da56d0cbe6b4ba9dd9e5d443dcc8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentStage: {fileID: 0}
+  skin: {fileID: 11400000, guid: c42314e1841bf684681d830b69798919, type: 2}
   userName: default
-  hosting: 0
+  lobby: {fileID: 0}
+  clicked: 0
 --- !u!114 &114671625553203502
 MonoBehaviour:
   m_ObjectHideFlags: 1

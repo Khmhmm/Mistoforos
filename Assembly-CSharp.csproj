@@ -51,6 +51,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\Characters\Character.cs" />
+     <Compile Include="Assets\Scripts\Characters\Skills\AttackingSkill.cs" />
+     <Compile Include="Assets\Scripts\Characters\Skills\DebuffingSkill.cs" />
+     <Compile Include="Assets\Scripts\Characters\Skills\HealingSkill.cs" />
+     <Compile Include="Assets\Scripts\Characters\Skills\Skill.cs" />
+     <Compile Include="Assets\Scripts\Game Stages\Sequence.cs" />
+     <Compile Include="Assets\Scripts\Game Stages\SingleReplics.cs" />
+     <Compile Include="Assets\Scripts\Game Stages\Stage.cs" />
+     <Compile Include="Assets\Scripts\Game Stages\Test\TestSequence.cs" />
      <Compile Include="Assets\Scripts\Main menu\MainmenuGUI.cs" />
      <Compile Include="Assets\Scripts\Network\LobbyHandler.cs" />
      <Compile Include="Assets\Scripts\Network\NetworkCustomGUI.cs" />

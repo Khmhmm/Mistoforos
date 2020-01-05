@@ -4,12 +4,10 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class MainmenuGUI : MonoBehaviour {
-
     public GUISkin skin;
     public static string mistoforos = "μισθοφόρος";
     public static float xOffset = mistoforos.Length * 20 + 10f;
     public static float yOffset = Screen.height * 0.05f + 40f;
-
     void OnGUI()
     {
         GUI.skin = skin;
@@ -17,12 +15,15 @@ public class MainmenuGUI : MonoBehaviour {
             new Rect(Screen.width - xOffset, Screen.height * 0.1f, 300, 40f), mistoforos);
 
 
-        if (GUI.Button(
+        /* if (GUI.Button(
             new Rect(Screen.width - xOffset, Screen.height * 0.1f + yOffset, 300f, 40f), "Play solo"
             ))
         {
-            SceneManager.LoadScene(2);
+            //SceneManager.LoadScene(2);
+            //TODO: fix server call CmdIncrement
         }
+
+        */
 
         if(GUI.Button(
             new Rect(Screen.width - xOffset, Screen.height * 0.1f + yOffset * 2, 300f, 40f), "LAN"
@@ -37,5 +38,7 @@ public class MainmenuGUI : MonoBehaviour {
         {
             Application.Quit();
         }
+
+        //character creator
     }
 }

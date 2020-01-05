@@ -235,5 +235,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skin: {fileID: 11400000, guid: c42314e1841bf684681d830b69798919, type: 2}
+  playerPrefab: {fileID: 1670722275102410, guid: 4990691c069914c4ea2f944273ac69ac,
+    type: 2}
   players: []
-  host: {fileID: 0}
+  count: 0
+  sequence: {fileID: 1077442692815450, guid: 41e4a5445aa9ea8498a0e8703b9f73b0, type: 2}
+  lastUser: {fileID: 0}
+  spawned: 0

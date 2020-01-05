@@ -125,7 +125,7 @@ GameObject:
   - component: {fileID: 348164361}
   m_Layer: 0
   m_Name: NetworkHandler
-  m_TagString: Untagged
+  m_TagString: GameController
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -154,7 +154,7 @@ MonoBehaviour:
     type: 2}
   m_AutoCreatePlayer: 1
   m_PlayerSpawnMethod: 0
-  m_OfflineScene: 
+  m_OfflineScene: Main menu
   m_OnlineScene: Lobby
   m_SpawnPrefabs: []
   m_CustomConfig: 0
@@ -238,6 +238,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   network: {fileID: 0}
   gskin: {fileID: 11400000, guid: c42314e1841bf684681d830b69798919, type: 2}
+  field: localhost
 --- !u!1 &1163246324
 GameObject:
   m_ObjectHideFlags: 0
