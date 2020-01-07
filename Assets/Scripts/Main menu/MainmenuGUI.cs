@@ -15,15 +15,12 @@ public class MainmenuGUI : MonoBehaviour {
             new Rect(Screen.width - xOffset, Screen.height * 0.1f, 300, 40f), mistoforos);
 
 
-        /* if (GUI.Button(
-            new Rect(Screen.width - xOffset, Screen.height * 0.1f + yOffset, 300f, 40f), "Play solo"
+         if (GUI.Button(
+            new Rect(Screen.width - xOffset, Screen.height * 0.1f + yOffset, 300f, 40f), "Create character"
             ))
         {
-            //SceneManager.LoadScene(2);
-            //TODO: fix server call CmdIncrement
+            SceneManager.LoadScene(3);
         }
-
-        */
 
         if(GUI.Button(
             new Rect(Screen.width - xOffset, Screen.height * 0.1f + yOffset * 2, 300f, 40f), "LAN"

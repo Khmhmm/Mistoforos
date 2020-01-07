@@ -5,8 +5,9 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
-[System.Serializable]
-public abstract class Character : MonoBehaviour {
+
+public abstract class Character : MonoBehaviour
+{
     public string charName, charSurname;
     public int level = 1;
     public int exp = 0;
@@ -22,7 +23,7 @@ public abstract class Character : MonoBehaviour {
  */
 
 /* implementation:
- * public void SavedOnDisk(){
+ * public void SaveOnDisk(){
     string md = Environment.GetFolderPath(Environment.SpecialFolder.Personal);  //путь к Документам
     if (!Directory.Exists(md + "\\My Games\\mistoforos"))
     {

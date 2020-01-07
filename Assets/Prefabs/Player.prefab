@@ -57,6 +57,9 @@ MonoBehaviour:
   userName: default
   lobby: {fileID: 0}
   clicked: 0
+  charObject: {fileID: 0}
+  id: -2
+  myHero: {fileID: 0}
 --- !u!114 &114671625553203502
 MonoBehaviour:
   m_ObjectHideFlags: 1

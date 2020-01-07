@@ -6,6 +6,7 @@ public abstract class Skill : MonoBehaviour {
     protected SkillType type;
     public int skillLevel = 1;
     public float power;
+    public int SKILL_ID;
 }
 
 public enum SkillType
