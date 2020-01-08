@@ -119,6 +119,8 @@ public class Hero : Character {
 
         Debug.Log(ret.ToString());
 
+        br.Close();
+        fs.Close();
         return g;
     }
 }

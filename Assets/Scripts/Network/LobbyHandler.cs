@@ -13,6 +13,8 @@ public class LobbyHandler : MonoBehaviour {
     public GameObject sequence;
     public bool spawned = false;
 
+    public bool heroesLoaded = false;
+
     private static float xOffset = MainmenuGUI.xOffset, yOffset = MainmenuGUI.yOffset;
 
 
@@ -26,9 +28,12 @@ public class LobbyHandler : MonoBehaviour {
         GameObject[] tmp = GameObject.FindGameObjectsWithTag("Player");
         if (tmp.Length == 0)
         {
+            /*
+             // does not working as well
             var player = Instantiate(playerPrefab, new Vector3(0f, 0f, 0f), Quaternion.Euler(0f, 0f, 0f));
             CancelInvoke();
             players.Add(player);
+            */
         }
         else
         {
@@ -37,6 +42,7 @@ public class LobbyHandler : MonoBehaviour {
                 if (!players.Contains(player))
                 {
                     players.Add(player);
+                    heroesLoaded = false;
                     player.GetComponent<UserScript>().id = players.Count;
                     count = 0;
                     foreach(var clearClick in players)
@@ -48,7 +54,15 @@ public class LobbyHandler : MonoBehaviour {
         }
     }
 
-
+    void LateUpdate()
+    {
+        if(count == players.Count)
+        {
+            //because players can't increment without hero
+            heroesLoaded = true;
+        }
+        //there is shouldn't be `else` block cuz making it false will start heroes synchronization alghoritm
+    }
 
 
     void OnGUI()
@@ -77,15 +91,18 @@ public class LobbyHandler : MonoBehaviour {
                     foreach (var clearClick in players)
                     {
                         clearClick.GetComponent<UserScript>().clicked = false;
+                        heroesLoaded = false;
                     }
                 }
             }
         }
     }
 
-    public void Attach(GameObject g, int listIndex)
+    public void Attach(GameObject heroGameObject, int listIndex)
     {
-        g.transform.parent = players[listIndex].transform;
-        players[listIndex].GetComponent<UserScript>().myHero = g.GetComponent<Hero>();
+        heroGameObject.transform.parent = players[listIndex].transform;
+        players[listIndex].GetComponent<UserScript>().charObject = heroGameObject;
+        players[listIndex].GetComponent<UserScript>().myHero = heroGameObject.GetComponent<Hero>();
     }
+
 }

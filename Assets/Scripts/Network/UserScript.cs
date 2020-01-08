@@ -12,8 +12,8 @@ using Debug = UnityEngine.Debug;
 public class UserScript : NetworkBehaviour {
     public GameObject currentStage;
     public GUISkin skin;
-    public string userName = "default"; 
-    [SyncVar(hook = "FindLobby")]public GameObject lobby;
+    public string userName = "default";
+    [SyncVar(hook = "FindLobby")] public GameObject lobby;
     public bool clicked = false;
     bool advice = true;
 
@@ -25,44 +25,109 @@ public class UserScript : NetworkBehaviour {
     string heroPath = "";
 
 
-            void Start()
-            {
-                var tmp = GameObject.Find("Handler");
-                if (isServer)
-                {
-                    FindLobby(tmp);
-                    Debug.Log("I found lobby");
-                }
+    void Start()
+    {
 
-                if (isLocalPlayer)
-                {
-                    this.name = "Me";
-                }
-                Invoke("CancelAdvice", 5f);
+        //lobby finding
+        var tmp = GameObject.Find("Handler");
+        if (isServer)
+        {
+            FindLobby(tmp);
+            Debug.Log("I found lobby");
+        }
+
+        if (isLocalPlayer)
+        {
+            this.name = "Me";
+        }
+        Invoke("CancelAdvice", 5f);
+    }
+
+    void LateUpdate()
+    {
+        if (!isLocalPlayer)
+            return;
+
+            if (Input.GetButton("Submit") && myHero != null)
+            {
+                CmdIncrement();
             }
 
-            void LateUpdate()
+        //Sync. players' heroes if lobby says that they're not loaded
+        //bool value should optimize this code
+        if (!lobby.GetComponent<LobbyHandler>().heroesLoaded)
+        {
+            string md = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+            if (md.Length > 5)
             {
-                if (!isLocalPlayer)
-                    return;
-
-                if (Input.GetButton("Submit") && myHero != null)
+                md += "\\My Games\\mistoforos\\Characters";
+            }
+            else
+            {
+                md = System.IO.Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName).ToString();
+                md += "\\Characters";
+            }
+            if (Directory.Exists(md))
+            {
+                DirectoryInfo[] dirs = new DirectoryInfo(md).GetDirectories();
+                foreach (var dir in dirs)
                 {
-                    CmdIncrement();
+                    CmdSyncHero(md + "\\" + dir.Name);
                 }
             }
+        }
+    }
 
     [Command]
-    public void CmdUpdateMyHero(GameObject playerUpdate)
+    public void CmdSyncHero(string path)
     {
-        RpcUpdateMyHero(playerUpdate,id);
+        byte[] arr;
+
+        using(FileStream fs = new FileStream(path + "\\data.mstfrschar", FileMode.Open))
+        {
+            BinaryReader br = new BinaryReader(fs);
+            arr = br.ReadBytes((int)fs.Length);
+            br.Close();
+        }
+        RpcSyncHero(path,arr);
     }
 
     [ClientRpc]
-    public void RpcUpdateMyHero(GameObject playerUpdate,int updID)
+    public void RpcSyncHero(string path, byte[] data)
     {
-        //lobby.GetComponent<LobbyHandler>().players.RemoveAt(updID-1); 
-        //lobby.GetComponent<LobbyHandler>().players.Add(playerUpdate);
+        if (!Directory.Exists(path))
+        {
+            Directory.CreateDirectory(path);
+        }
+
+        try
+        {
+            using (FileStream fs = new FileStream(path + "\\data.mstfrschar", FileMode.Create, FileAccess.Write))
+            {
+                BinaryWriter br = new BinaryWriter(fs);
+                br.Write(data);
+                br.Close();
+            }
+        }
+        catch(IOException e)
+        {
+            //ignore e, it's IOException `Sharing violation on the path`
+            //idk if it's dangerous
+        }
+    }
+
+    [Command]
+    public void CmdUpdateMyHero(string path, int userID)
+    {
+        RpcUpdateMyHero(path, userID);
+    }
+
+    [ClientRpc]
+    public void RpcUpdateMyHero(string path,int updID)
+    {
+        Debug.Log("Trying at: " + path);
+        GameObject newHero = Hero.Load(new FileStream(path, FileMode.Open));
+        lobby.GetComponent<LobbyHandler>().Attach(newHero, updID - 1);
     }
 
     [Command]
@@ -106,7 +171,7 @@ public class UserScript : NetworkBehaviour {
                     //md += "\\My Games\\mistoforos";
 
                     string md = Environment.GetFolderPath(Environment.SpecialFolder.Personal);  //путь к Документам
-                                                                                                //there is problems when it is located not on a disk C
+                                                                                                //there is problems when execute file is located not on a disk C
                     if (md.Length > 5)
                     {
                         md += "\\My Games\\mistoforos\\Characters";
@@ -133,16 +198,7 @@ public class UserScript : NetworkBehaviour {
 
                                 Debug.Log(heroPath);
 
-
-                                charObject = Hero.Load(File.OpenRead(heroPath));
-                                //charObject.AddComponent<NetworkIdentity>();
-                                //charObject.GetComponent<NetworkIdentity>().localPlayerAuthority = true;
-                                charObject.transform.parent = this.transform;
-                                charObject.name = this.name + " charObject";
-
-                                myHero = charObject.GetComponent<Hero>();
-
-                                CmdUpdateMyHero(this.gameObject);
+                                CmdUpdateMyHero(heroPath, id);
                                 }
                             }
                         }
