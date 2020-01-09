@@ -1,12 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Networking;
 
-public class NetworkCustomGUI : MonoBehaviour {
-
-    public NetworkManager network;
-    public NetworkDiscovery discovery;
+public class NeoCustomGUI : MonoBehaviour {
+    public NeoNetworkManager network;
     public GUISkin gskin;
     float xOffset = MainmenuGUI.xOffset;
     float yOffset = MainmenuGUI.yOffset;
@@ -15,27 +12,25 @@ public class NetworkCustomGUI : MonoBehaviour {
 
     void Start()
     {
-        network = GetComponent<NetworkManager>();
+        network = GetComponent<NeoNetworkManager>();
     }
 
-	void OnGUI()
+    void OnGUI()
     {
-        if(action) { return; }
+        if (action) { return; }
 
         GUI.skin = gskin;
         GUI.Label(
-            new Rect(Screen.width - xOffset, Screen.height * 0.01f, Screen.width * 0.5f, Screen.height * 0.09f), 
+            new Rect(Screen.width - xOffset, Screen.height * 0.01f, Screen.width * 0.5f, Screen.height * 0.09f),
             "Please, choose an option");
 
         //HOST
-        if(GUI.Button(
+        if (GUI.Button(
             new Rect(Screen.width - xOffset - xOffset + 10f, Screen.height * 0.01f + yOffset, xOffset - 10f, 20f),
             "LAN HOST"))
         {
-            //network.networkAddress = hostip.ToString();
-            //network.serverBindToIP = true;
-            //network.serverBindAddress = hostip.ToString();
-            network.StartHost();
+            network.SetupServer();
+            network.SetupLocalClient();
             action = true;
         }
 
@@ -44,12 +39,11 @@ public class NetworkCustomGUI : MonoBehaviour {
         //CONNECT
         field = GUI.TextField(new Rect(Screen.width - xOffset, 250f, xOffset - 10f, 20f), field);
 
-        if(GUI.Button(
-            new Rect(Screen.width - xOffset*2f, 250f, xOffset - 10f, 20f),
+        if (GUI.Button(
+            new Rect(Screen.width - xOffset * 2f, 250f, xOffset - 10f, 20f),
             "LAN CONNECT"))
         {
-            network.networkAddress = field.ToString();
-            network.StartClient();
+            network.SetupClient(field.ToString());
             action = true;
         }
     }

@@ -51,6 +51,8 @@ public class Hero : Character {
 
         md += "\\" + charName + "_" + charSurname;
 
+        Debug.Log(md);
+
         if (!Directory.Exists(md))
         {
             Directory.CreateDirectory(md);

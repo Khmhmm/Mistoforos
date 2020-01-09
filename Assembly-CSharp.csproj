@@ -66,6 +66,8 @@
      <Compile Include="Assets\Scripts\Main menu\MainmenuGUI.cs" />
      <Compile Include="Assets\Scripts\Main menu\QuitButton.cs" />
      <Compile Include="Assets\Scripts\Network\LobbyHandler.cs" />
+     <Compile Include="Assets\Scripts\Network\NeoCustomGUI.cs" />
+     <Compile Include="Assets\Scripts\Network\NeoNetworkManager.cs" />
      <Compile Include="Assets\Scripts\Network\NetworkCustomGUI.cs" />
      <Compile Include="Assets\Scripts\Network\UserScript.cs" />
  <Reference Include="UnityEngine.CoreModule">

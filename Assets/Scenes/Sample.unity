@@ -203,9 +203,9 @@ MonoBehaviour:
   m_Script: {fileID: -822479833, guid: 870353891bb340e2b2a9c8707e7419ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_NetworkPort: 7070
+  m_NetworkPort: 7777
   m_ServerBindToIP: 0
-  m_ServerBindAddress: 
+  m_ServerBindAddress: 25.45.168.209
   m_NetworkAddress: localhost
   m_DontDestroyOnLoad: 1
   m_RunInBackground: 1
@@ -299,8 +299,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   network: {fileID: 0}
+  discovery: {fileID: 0}
   gskin: {fileID: 11400000, guid: c42314e1841bf684681d830b69798919, type: 2}
   field: localhost
+  hostip: localhost
 --- !u!1 &356274386
 GameObject:
   m_ObjectHideFlags: 0

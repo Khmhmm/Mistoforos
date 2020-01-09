@@ -57,23 +57,11 @@ public class UserScript : NetworkBehaviour {
         //bool value should optimize this code
         if (!lobby.GetComponent<LobbyHandler>().heroesLoaded)
         {
-            string md = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-            if (md.Length > 5)
+            string md = "\\My Games\\mistoforos\\Characters";
+            DirectoryInfo[] dirs = new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.Personal) + md).GetDirectories();
+            foreach (var dir in dirs)
             {
-                md += "\\My Games\\mistoforos\\Characters";
-            }
-            else
-            {
-                md = System.IO.Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName).ToString();
-                md += "\\Characters";
-            }
-            if (Directory.Exists(md))
-            {
-                DirectoryInfo[] dirs = new DirectoryInfo(md).GetDirectories();
-                foreach (var dir in dirs)
-                {
-                    CmdSyncHero(md + "\\" + dir.Name);
-                }
+                CmdSyncHero(md + "\\" + dir.Name);
             }
         }
     }
@@ -82,19 +70,28 @@ public class UserScript : NetworkBehaviour {
     public void CmdSyncHero(string path)
     {
         byte[] arr;
-
-        using(FileStream fs = new FileStream(path + "\\data.mstfrschar", FileMode.Open))
+        try
         {
-            BinaryReader br = new BinaryReader(fs);
-            arr = br.ReadBytes((int)fs.Length);
-            br.Close();
-        }
+            using (FileStream fs = new FileStream(Environment.GetFolderPath(Environment.SpecialFolder.Personal) + path + "\\data.mstfrschar", FileMode.Open))
+            {
+                BinaryReader br = new BinaryReader(fs);
+                arr = br.ReadBytes((int)fs.Length);
+                br.Close();
+            }
+        
         RpcSyncHero(path,arr);
+        }
+        catch (IOException e)
+        {
+            Debug.LogError(e);
+        }
     }
 
     [ClientRpc]
     public void RpcSyncHero(string path, byte[] data)
     {
+        Debug.Log(data == null);
+
         if (!Directory.Exists(path))
         {
             Directory.CreateDirectory(path);
@@ -102,7 +99,7 @@ public class UserScript : NetworkBehaviour {
 
         try
         {
-            using (FileStream fs = new FileStream(path + "\\data.mstfrschar", FileMode.Create, FileAccess.Write))
+            using (FileStream fs = new FileStream(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + path + "\\data.mstfrschar", FileMode.Create, FileAccess.Write))
             {
                 BinaryWriter br = new BinaryWriter(fs);
                 br.Write(data);
@@ -111,8 +108,7 @@ public class UserScript : NetworkBehaviour {
         }
         catch(IOException e)
         {
-            //ignore e, it's IOException `Sharing violation on the path`
-            //idk if it's dangerous
+            Debug.LogError(e);
         }
     }
 
@@ -125,8 +121,8 @@ public class UserScript : NetworkBehaviour {
     [ClientRpc]
     public void RpcUpdateMyHero(string path,int updID)
     {
-        Debug.Log("Trying at: " + path);
-        GameObject newHero = Hero.Load(new FileStream(path, FileMode.Open));
+        Debug.Log("Trying at: " + Environment.GetFolderPath(Environment.SpecialFolder.Personal) + path);
+        GameObject newHero = Hero.Load(new FileStream(Environment.GetFolderPath(Environment.SpecialFolder.Personal) + path, FileMode.Open));
         lobby.GetComponent<LobbyHandler>().Attach(newHero, updID - 1);
     }
 
@@ -170,22 +166,12 @@ public class UserScript : NetworkBehaviour {
                     //string md = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
                     //md += "\\My Games\\mistoforos";
 
-                    string md = Environment.GetFolderPath(Environment.SpecialFolder.Personal);  //путь к Документам
-                                                                                                //there is problems when execute file is located not on a disk C
-                    if (md.Length > 5)
-                    {
-                        md += "\\My Games\\mistoforos\\Characters";
-                    }
-                    else
-                    {
-                        md = System.IO.Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName).ToString();
-                        md += "\\Characters";
-                    }
-            
+                    string md = "\\My Games\\mistoforos\\Characters";
+                    
                     if (Directory.Exists(md))
                         {
                             foundChars = true;
-                            DirectoryInfo[] dirs = new DirectoryInfo(md).GetDirectories();
+                            DirectoryInfo[] dirs = new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.Personal) + md).GetDirectories();
                             for (int i=0; i < dirs.Length;i++)
                             {
                                 //Debug.Log(dirs[i].FullName);
@@ -193,12 +179,10 @@ public class UserScript : NetworkBehaviour {
                                 if(GUI.Button(new Rect(Screen.width *0.4f,Screen.height*0.2f + i * 40f, 200f, 40f),dirs[i].Name))
                                 {
                         
-                                heroPath = dirs[i].FullName;
+                                heroPath += dirs[i].Name;
                                 heroPath += "\\data.mstfrschar";
 
-                                Debug.Log(heroPath);
-
-                                CmdUpdateMyHero(heroPath, id);
+                                CmdUpdateMyHero(md + "\\" + heroPath, id);
                                 }
                             }
                         }
