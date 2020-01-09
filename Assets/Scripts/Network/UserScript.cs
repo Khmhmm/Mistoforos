@@ -57,8 +57,8 @@ public class UserScript : NetworkBehaviour {
         //bool value should optimize this code
         if (!lobby.GetComponent<LobbyHandler>().heroesLoaded)
         {
-            string md = "\\My Games\\mistoforos\\Characters";
-            DirectoryInfo[] dirs = new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.Personal) + md).GetDirectories();
+            string md = "\\Characters";
+            DirectoryInfo[] dirs = new DirectoryInfo(Environment.CurrentDirectory + md).GetDirectories();
             foreach (var dir in dirs)
             {
                 CmdSyncHero(md + "\\" + dir.Name);
@@ -72,7 +72,7 @@ public class UserScript : NetworkBehaviour {
         byte[] arr;
         try
         {
-            using (FileStream fs = new FileStream(Environment.GetFolderPath(Environment.SpecialFolder.Personal) + path + "\\data.mstfrschar", FileMode.Open))
+            using (FileStream fs = new FileStream(Environment.CurrentDirectory + path + "\\data.mstfrschar", FileMode.Open))
             {
                 BinaryReader br = new BinaryReader(fs);
                 arr = br.ReadBytes((int)fs.Length);
@@ -90,7 +90,7 @@ public class UserScript : NetworkBehaviour {
     [ClientRpc]
     public void RpcSyncHero(string path, byte[] data)
     {
-        Debug.Log(data == null);
+        //Debug.Log(data == null);
 
         if (!Directory.Exists(path))
         {
@@ -99,11 +99,12 @@ public class UserScript : NetworkBehaviour {
 
         try
         {
-            using (FileStream fs = new FileStream(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + path + "\\data.mstfrschar", FileMode.Create, FileAccess.Write))
+            using (FileStream fs = new FileStream(Environment.CurrentDirectory + path + "\\data.mstfrschar", FileMode.OpenOrCreate, FileAccess.Write))
             {
                 BinaryWriter br = new BinaryWriter(fs);
                 br.Write(data);
                 br.Close();
+                fs.Close();
             }
         }
         catch(IOException e)
@@ -122,7 +123,7 @@ public class UserScript : NetworkBehaviour {
     public void RpcUpdateMyHero(string path,int updID)
     {
         Debug.Log("Trying at: " + Environment.GetFolderPath(Environment.SpecialFolder.Personal) + path);
-        GameObject newHero = Hero.Load(new FileStream(Environment.GetFolderPath(Environment.SpecialFolder.Personal) + path, FileMode.Open));
+        GameObject newHero = Hero.Load(new FileStream(Environment.CurrentDirectory + path, FileMode.Open));
         lobby.GetComponent<LobbyHandler>().Attach(newHero, updID - 1);
     }
 
@@ -166,12 +167,12 @@ public class UserScript : NetworkBehaviour {
                     //string md = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
                     //md += "\\My Games\\mistoforos";
 
-                    string md = "\\My Games\\mistoforos\\Characters";
+                    string md = "\\Characters";
                     
                     if (Directory.Exists(md))
                         {
                             foundChars = true;
-                            DirectoryInfo[] dirs = new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.Personal) + md).GetDirectories();
+                            DirectoryInfo[] dirs = new DirectoryInfo(Environment.CurrentDirectory + md).GetDirectories();
                             for (int i=0; i < dirs.Length;i++)
                             {
                                 //Debug.Log(dirs[i].FullName);

@@ -36,19 +36,9 @@ public class Hero : Character {
 
     public override void SaveOnDisk()
     {
-        
-        string md = Environment.GetFolderPath(Environment.SpecialFolder.Personal);  //путь к Документам
-        //there is problems when it is located not on a disk C
-        if (md.Length > 5)
-        {
-            md += "\\My Games\\mistoforos\\Characters";
-        }
-        else
-        {
-            md = System.IO.Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName).ToString();
-            md += "\\Characters";
-        }
 
+        string md = Environment.CurrentDirectory;
+        md += "\\Characters";
         md += "\\" + charName + "_" + charSurname;
 
         Debug.Log(md);

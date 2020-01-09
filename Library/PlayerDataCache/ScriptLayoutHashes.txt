@@ -1,6 +1,6 @@
 WindowsStandalone
 PlayerPath?
-H:/Uprs/proj1/Mistoforos/build/mistoforos.exe
+H:/Uprs/proj1/SecondTrying/Mistoforos/build/mistoforos.exe
 SceneListBegin?
 Assets/Scenes/Main menu.unity
 Assets/Scenes/Sample.unity
