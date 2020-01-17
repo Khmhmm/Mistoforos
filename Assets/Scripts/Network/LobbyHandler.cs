@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 
-public class LobbyHandler : MonoBehaviour {
+public class LobbyHandler : NetworkBehaviour {
     public GUISkin skin;
     public GameObject playerPrefab;
     public List<GameObject> players;
@@ -14,6 +14,9 @@ public class LobbyHandler : MonoBehaviour {
     public bool spawned = false;
 
     public bool heroesLoaded = false;
+    public bool everyoneIsReady = false;
+
+    private bool delay = false;
 
     private static float xOffset = MainmenuGUI.xOffset, yOffset = MainmenuGUI.yOffset;
 
@@ -56,14 +59,38 @@ public class LobbyHandler : MonoBehaviour {
 
     void LateUpdate()
     {
-        if(count == players.Count)
+        if(count == players.Count && !delay)
         {
-            //because players can't increment without hero
-            heroesLoaded = true;
+            if (!heroesLoaded)
+            {
+                //because players can't increment without hero
+                heroesLoaded = true;
+                count = 0;
+                MakeUsersUnclicked();
+            }
+            else
+            {
+                everyoneIsReady = true;
+            }
+            delay = true;
+            StartCoroutine("Delay");
         }
-        //there is shouldn't be `else` block cuz making it false will start heroes synchronization alghoritm
     }
 
+    [Command]
+    public void CmdSetStage(GameObject stage)
+    {
+        RpcSetStage(stage);
+    }
+
+    [ClientRpc]
+    public void RpcSetStage(GameObject stage)
+    {
+        foreach(var player in players)
+        {
+            player.GetComponent<UserScript>().currentStage = stage;
+        }
+    }
 
     void OnGUI()
     {
@@ -105,4 +132,17 @@ public class LobbyHandler : MonoBehaviour {
         players[listIndex].GetComponent<UserScript>().myHero = heroGameObject.GetComponent<Hero>();
     }
 
+    public void MakeUsersUnclicked()
+    {
+        foreach(var player in players)
+        {
+            player.GetComponent<UserScript>().clicked = false;
+        }
+    }
+
+    IEnumerator Delay()
+    {
+        yield return new WaitForSeconds(2f);
+        delay = false;
+    }
 }

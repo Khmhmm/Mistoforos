@@ -24,6 +24,8 @@ public class UserScript : NetworkBehaviour {
     bool foundChars = false;
     string heroPath = "";
 
+    private bool delay = false;
+
 
     void Start()
     {
@@ -33,7 +35,7 @@ public class UserScript : NetworkBehaviour {
         if (isServer)
         {
             FindLobby(tmp);
-            Debug.Log("I found lobby");
+           
         }
 
         if (isLocalPlayer)
@@ -48,9 +50,11 @@ public class UserScript : NetworkBehaviour {
         if (!isLocalPlayer)
             return;
 
-            if (Input.GetButton("Submit") && myHero != null)
+            if (Input.GetButton("Submit") && myHero != null && !delay)
             {
                 CmdIncrement();
+                delay = true;
+                StartCoroutine("Delay");
             }
 
         //Sync. players' heroes if lobby says that they're not loaded
@@ -61,30 +65,23 @@ public class UserScript : NetworkBehaviour {
             DirectoryInfo[] dirs = new DirectoryInfo(Environment.CurrentDirectory + md).GetDirectories();
             foreach (var dir in dirs)
             {
-                CmdSyncHero(md + "\\" + dir.Name);
+                byte[] arr;
+                using (FileStream fs = new FileStream(Environment.CurrentDirectory + md + "\\" + dir.Name + "\\data.mstfrschar", FileMode.Open))
+                {
+                    BinaryReader br = new BinaryReader(fs);
+                    arr = br.ReadBytes((int)fs.Length);
+                    br.Close();
+                }
+
+                CmdSyncHero(md + "\\" + dir.Name, arr);
             }
         }
     }
 
     [Command]
-    public void CmdSyncHero(string path)
+    public void CmdSyncHero(string path, byte[] data)
     {
-        byte[] arr;
-        try
-        {
-            using (FileStream fs = new FileStream(Environment.CurrentDirectory + path + "\\data.mstfrschar", FileMode.Open))
-            {
-                BinaryReader br = new BinaryReader(fs);
-                arr = br.ReadBytes((int)fs.Length);
-                br.Close();
-            }
-        
-        RpcSyncHero(path,arr);
-        }
-        catch (IOException e)
-        {
-            Debug.LogError(e);
-        }
+        RpcSyncHero(path, data);
     }
 
     [ClientRpc]
@@ -99,17 +96,34 @@ public class UserScript : NetworkBehaviour {
 
         try
         {
-            using (FileStream fs = new FileStream(Environment.CurrentDirectory + path + "\\data.mstfrschar", FileMode.OpenOrCreate, FileAccess.Write))
+            if(!Directory.Exists(Environment.CurrentDirectory + path))
+            {
+                Directory.CreateDirectory(Environment.CurrentDirectory + path);
+            }
+
+            using (FileStream fs = new FileStream(Environment.CurrentDirectory + path + "\\data.mstfrschar", FileMode.CreateNew, FileAccess.Write))
             {
                 BinaryWriter br = new BinaryWriter(fs);
                 br.Write(data);
+                br.Flush();
                 br.Close();
                 fs.Close();
             }
         }
         catch(IOException e)
         {
-            Debug.LogError(e);
+            //it is normal situation, when IOException calls with `Could not create file 'filename' file is already exists`
+            //because FileMode is CreateNew calls it.
+            //we don't want to override existing files
+            string ignore = "System.IO.IOException: Could not create file";
+            if (e.ToString().Substring(0, ignore.Length).Equals(ignore))
+            {
+                //do nothing
+            }
+            else
+            {
+                Debug.LogError(e);
+            }
         }
     }
 
@@ -203,6 +217,12 @@ public class UserScript : NetworkBehaviour {
     void FindLobby(GameObject tmp)
     {
         lobby = tmp;
+    }
+
+    IEnumerator Delay()
+    {
+        yield return new WaitForSeconds(2f);
+        delay = false;
     }
 
 }

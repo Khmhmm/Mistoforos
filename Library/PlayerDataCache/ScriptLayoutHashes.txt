@@ -7,7 +7,7 @@ Assets/Scenes/Sample.unity
 Assets/Scenes/Lobby.unity
 Assets/Scenes/Character Creator.unity
 SceneListEnd?
-d7923307ae9b37eeb06c539e5a6f2232 Assembly-CSharp.dll:.Sequence
+d74d5bc25fb9dbaa5b4b0a466499a664 Assembly-CSharp.dll:.Sequence
 05524b8f659e7bfe5756d1335fec24ba UnityEngine.Timeline.dll:UnityEngine.Timeline.ActivationPlayableAsset
 4b12dd839b2293f8457cd67cc3610b85 UnityEngine.Timeline.dll:UnityEngine.Timeline.ActivationTrack
 8144169769d51429c4aedc8b0f92d47b UnityEngine.Timeline.dll:UnityEngine.Timeline.AnimationPlayableAsset
@@ -122,11 +122,12 @@ bc68edb0af574bf79f9550ead8ebae5c UnityEngine.HoloLens.dll:UnityEngine.Audio.Audi
 463516d5b5fe8e67a0a24c48f2095b04 UnityEngine.HoloLens.dll:UnityEngine.EventSystems.HoloLensInputModule
 c2275a8bfbb9f9942cad75ecdfded41d UnityEngine.HoloLens.dll:UnityEngine.XR.WSA.SpatialMappingCollider
 45f3431f0103c41611e8d4eec3d439df UnityEngine.HoloLens.dll:UnityEngine.XR.WSA.SpatialMappingRenderer
-ddf936ddd2b4ff0f09651b5dd44fbff5 Assembly-CSharp.dll:.SingleReplics
+697b9e26e32fa60aebc4384557f8070f Assembly-CSharp.dll:.SingleReplics
 affa0a6e20c68fe678a8c20adc6e2b7d Assembly-CSharp.dll:.NeoCustomGUI
+432f2f3518f1d42944168e778a25997c Assembly-CSharp.dll:.SequenceHandler
 79c8f2a180518634639931abfe69656e Assembly-CSharp.dll:.UserScript
 02dc80636e2660aa42ec6f164a480c8b Assembly-CSharp.dll:.CharacterDraw
-49d54f7b3c670b7c0dce697748dd4edb Assembly-CSharp.dll:.LobbyHandler
+933ef39f92d5f4afd7739309721a3cf0 Assembly-CSharp.dll:.LobbyHandler
 fc1e0f4d8439d9928083474691511a13 UnityEngine.Networking.dll:UnityEngine.Networking.NetworkAnimator
 05524b8f659e7bfe5756d1335fec24ba UnityEngine.Networking.dll:UnityEngine.Networking.NetworkBehaviour
 60b2bb652410a5867a5ab9a01cd38461 UnityEngine.Networking.dll:UnityEngine.Networking.NetworkDiscovery
@@ -161,6 +162,6 @@ c2275a8bfbb9f9942cad75ecdfded41d UnityEngine.HoloLens.dll:UnityEngine.XR.WSA.Spa
 9de3a22eca9aefadba2d10d5987cefe3 UnityEngine.SpatialTracking.dll:UnityEngine.SpatialTracking.TrackedPoseDriver
 5116f5dfe18f700514af840f470e1850 Assembly-CSharp.dll:.AttackingSkill
 5116f5dfe18f700514af840f470e1850 Assembly-CSharp.dll:.DebuffingSkill
-d7923307ae9b37eeb06c539e5a6f2232 Assembly-CSharp.dll:.TestSequence
+d74d5bc25fb9dbaa5b4b0a466499a664 Assembly-CSharp.dll:.TestSequence
 e23d6a5e7f7d392d4e33de8a62ce0d1e Assembly-CSharp.dll:.Hero
 492f6308468ef7da278e627cc85aa38c Assembly-CSharp.dll:.CharacterCreator

@@ -5,7 +5,7 @@ using UnityEngine;
 public class TestSequence : Sequence {
 
     // Use this for initialization
-    protected void Start () {
+    protected new void Start () {
 
         var g = new GameObject("new");
         g.AddComponent<SingleReplics>();

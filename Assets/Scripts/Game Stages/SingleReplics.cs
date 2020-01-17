@@ -5,9 +5,8 @@ using UnityEngine;
 public class SingleReplics : Stage {
 
     public string speaker, text;
-    private new bool easyContinuable = true;
 
-    public SingleReplics(string speaker,string text) { this.speaker = speaker; this.text = text; }
+    public SingleReplics(string speaker,string text) { this.speaker = speaker; this.text = text; SetEasyContinuable(true); }
 
     public override void ShowGUI()
     {

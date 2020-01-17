@@ -9,6 +9,7 @@ public class Sequence : MonoBehaviour {
 
     public GameObject current = null;
     private int index = 0;
+    public bool destroying = false;
 
     protected void Start()
     {
@@ -22,13 +23,6 @@ public class Sequence : MonoBehaviour {
             //check next
         }
 
-            GameObject endCredit = new GameObject("endSeq");
-            endCredit.transform.parent = this.transform;
-            endCredit.AddComponent<SingleReplics>();
-            endCredit.GetComponent<SingleReplics>().speaker = "";
-            endCredit.GetComponent<SingleReplics>().text = "The end";
-            stages.Add(endCredit);
-
         foreach (var stage in stages)
         {
             stage.SetActive(false);
@@ -38,4 +32,26 @@ public class Sequence : MonoBehaviour {
 
     }
 
+    public void Next()
+    {
+        ++index;
+        current = (stages.Count > index) ? stages[index] : null;
+        if (current == null)
+        {
+            destroying = true;
+            Destroy(this.gameObject);
+        }
+    }
+
 }
+
+
+/*
+ * 
+            GameObject endCredit = new GameObject("endSeq");
+            endCredit.transform.parent = this.transform;
+            endCredit.AddComponent<SingleReplics>();
+            endCredit.GetComponent<SingleReplics>().speaker = "";
+            endCredit.GetComponent<SingleReplics>().text = "The end";
+            stages.Add(endCredit);
+*/
