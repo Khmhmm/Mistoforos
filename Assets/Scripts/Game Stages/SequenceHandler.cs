@@ -3,16 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class SequenceHandler : MonoBehaviour { 
+public class SequenceHandler : MonoBehaviour {
+    public GUISkin skin;
     public GameObject sequence;
     public GameObject lobby;
     public bool goNext = false;
-    public bool delay = false;
 
-    void Start()
-    {
-
-    }
 
     void LateUpdate()
     {
@@ -27,14 +23,21 @@ public class SequenceHandler : MonoBehaviour {
 
             lobby.GetComponent<LobbyHandler>().CmdSetStage(sequence.GetComponent<Sequence>().current);
 
-            if (lobby.GetComponent<LobbyHandler>().everyoneIsReady && !delay)
+            if(sequence.GetComponent<Sequence>().current.GetComponent<Stage>().GetType().Equals("EndingStage"))
+            {
+                //TODO:
+                //update player's hero savefile
+                //load next sequence from long-time memory by [clientrpc] method
+            }
+
+            if (lobby.GetComponent<LobbyHandler>().everyoneIsReady)
             {
                 sequence.GetComponent<Sequence>().Next();
-                lobby.GetComponent<LobbyHandler>().everyoneIsReady = false;
                 lobby.GetComponent<LobbyHandler>().count = 0;
                 lobby.GetComponent<LobbyHandler>().MakeUsersUnclicked();
-                delay = true;
-                StartCoroutine("Delay");
+
+
+                lobby.GetComponent<LobbyHandler>().everyoneIsReady = false;
             }
 
             if (sequence.GetComponent<Sequence>().destroying)
@@ -44,14 +47,10 @@ public class SequenceHandler : MonoBehaviour {
         }
     }
 
-    IEnumerator Delay()
-    {
-        yield return new WaitForSeconds(3f);
-        delay = false;
-    }
-
+    
     void OnGUI()
     {
+        GUI.skin = skin;
         if (sequence != null && lobby.GetComponent<LobbyHandler>().heroesLoaded)
         {
             sequence.GetComponent<Sequence>().current.GetComponent<Stage>().ShowGUI();

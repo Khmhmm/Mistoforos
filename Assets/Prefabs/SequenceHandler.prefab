@@ -51,6 +51,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02e487e5b0c057a41ab6a1cb108c4a79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sequence: {fileID: 0}
+  skin: {fileID: 11400000, guid: c42314e1841bf684681d830b69798919, type: 2}
+  sequence: {fileID: 1729342799427092, guid: cf10d28d86739114db226e898c8606e8, type: 2}
+  lobby: {fileID: 0}
   goNext: 0
-  delay: 0

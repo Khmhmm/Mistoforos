@@ -167,7 +167,7 @@ public class UserScript : NetworkBehaviour {
 
                 if (GUI.Button(new Rect(Screen.width - MainmenuGUI.xOffset, Screen.height * 0.8f + MainmenuGUI.yOffset, 200f, 40f), "Quit"))
                 {
-                    Application.Quit();
+                    SceneManager.LoadScene("Main menu");
                 }
 
                 if (!foundChars)
@@ -221,7 +221,7 @@ public class UserScript : NetworkBehaviour {
 
     IEnumerator Delay()
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(0.5f);
         delay = false;
     }
 

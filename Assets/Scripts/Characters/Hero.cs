@@ -17,6 +17,9 @@ public class Hero : Character {
     //    public int exp = 0;
     
     public bool mage=false;
+    //this property is pointing at current sequence in long-time memory
+    public int Quest { get; set; }
+
     public List<Skill> skills = null;
 
     public Hero()
@@ -27,11 +30,12 @@ public class Hero : Character {
         this.exp = 0;
         this.mage = false;
         this.skills = null;
+        this.Quest = 0;
     }
 
-    public string ToString()
+    public override string ToString()
     {
-        return charName + " " + charSurname + ", level: " + level + " : " + exp + ", mage? " + mage;
+        return charName + " " + charSurname + ", level: " + level + " : " + exp + ", mage? " + mage + ", quest index: " + Quest;
     }
 
     public override void SaveOnDisk()
@@ -51,7 +55,7 @@ public class Hero : Character {
         Debug.Log("Cur. path: " + md);
 
         //crypting alghoritm
-        string crypto = charName + "##" + charSurname + "##" + level + "##" + exp + "##" + mage;
+        string crypto = charName + "##" + charSurname + "##" + level + "##" + exp + "##" + mage + "##" + Quest;
             if (skills!=null)
             {
                 foreach (var skill in skills)
@@ -90,7 +94,7 @@ public class Hero : Character {
                 bytes[i] -= 1;
             }
 
-        //string crypto = charName + "##" + charSurname + "##" + level + "##" + exp + "##" + mage;
+        //string crypto = charName + "##" + charSurname + "##" + level + "##" + exp + "##" + mage + "##" + Level;
         
         string decrypto = Encoding.UTF8.GetString(bytes);
         string[] datas = decrypto.Split("##".ToCharArray());
@@ -102,8 +106,13 @@ public class Hero : Character {
         ret.level = int.Parse(datas[4]);
         ret.exp = int.Parse(datas[6]);
         ret.mage = bool.Parse(datas[8]);
+        try
+        {
+            ret.Quest = int.Parse(datas[10]);
+        }
+        catch(Exception e) { Debug.LogWarning("Your char's quest index wasn't loaded. It will be equaled to 0. Exception: " + e); ret.Quest = 0; }
 
-        if (datas.Length > 9)
+        if (datas.Length > 11)
         {
            //TODO: add skills
            //Remember короче баг дэбильный, что, например, datas[0] = "Имя", datas[1] = "" (ПОЧЕМУ НЕ ЗНАЮ), datas[2] = "Фамилия", datas[3] = "" и т.д.

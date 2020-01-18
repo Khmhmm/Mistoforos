@@ -14,4 +14,14 @@ public class SingleReplics : Stage {
         GUI.Label(new Rect(Screen.width * 0.1f, Screen.height * 0.2f, Screen.width * 0.5f, Screen.height * 0.25f), text);
 
     }
+
+    public override string GetType()
+    {
+        return "SingleReplics";
+    }
+
+    public override string GetContent()
+    {
+        return "Speaker:" + speaker + ";Text:" + text;
+    }
 }

@@ -11,7 +11,6 @@ public class LobbyHandler : NetworkBehaviour {
     public List<GameObject> players;
     public int count=0;
     public GameObject sequence;
-    public bool spawned = false;
 
     public bool heroesLoaded = false;
     public bool everyoneIsReady = false;
@@ -94,7 +93,7 @@ public class LobbyHandler : NetworkBehaviour {
 
     void OnGUI()
     {
-        if (spawned)
+        if (heroesLoaded)
         {
             return;
         }
@@ -142,7 +141,7 @@ public class LobbyHandler : NetworkBehaviour {
 
     IEnumerator Delay()
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(0.7f);
         delay = false;
     }
 }

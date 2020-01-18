@@ -3,7 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class Stage : MonoBehaviour {
-    public GameObject next;
+
+    public abstract string GetType();
+    public abstract string GetContent();
+
+    public int nextStageIndex;
     /*
      * it should become switch to `true` when, for example
      * the fight is over or dialogue choice has been done.

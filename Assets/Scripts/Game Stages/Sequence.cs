@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class Sequence : MonoBehaviour {
 
     public List<GameObject> stages;
@@ -17,29 +18,41 @@ public class Sequence : MonoBehaviour {
         if (current == null)
         {
             Debug.LogError("Cannot start, the first stage = null");
+            return;
         }
-        else
+
+        bool endingStageIsExists = false;
+        foreach(var stage in stages)
         {
-            //check next
+            if (stage.GetComponent<Stage>().GetType().Equals("EndingStage"))
+            {
+                endingStageIsExists = true;
+            }
         }
 
-        foreach (var stage in stages)
+        if (!endingStageIsExists)
         {
-            stage.SetActive(false);
+            Debug.LogWarning("The ending stage object is not exist in this object. It is not good and may destroy player's save file");
         }
-        current.SetActive(true);
-
-
     }
 
     public void Next()
     {
-        ++index;
-        current = (stages.Count > index) ? stages[index] : null;
-        if (current == null)
+        if (!current.GetComponent<Stage>().GetType().Equals("EndingStage"))
         {
-            destroying = true;
-            Destroy(this.gameObject);
+            index = (current.GetComponent<Stage>().nextStageIndex != 0) ? current.GetComponent<Stage>().nextStageIndex : ++index;
+
+            current = (stages.Count > index) ? stages[index] : null;
+            if (current == null)
+            {
+                destroying = true;
+                Destroy(this.gameObject);
+            }
+        }
+        else
+        {
+            //TODO:
+            // make method that signs handler load next sequence by property Quest in EndingStage class.
         }
     }
 
@@ -54,4 +67,11 @@ public class Sequence : MonoBehaviour {
             endCredit.GetComponent<SingleReplics>().speaker = "";
             endCredit.GetComponent<SingleReplics>().text = "The end";
             stages.Add(endCredit);
+
+    
+        foreach (var stage in stages)
+        {
+            stage.SetActive(false);
+        }
+        current.SetActive(true);
 */
