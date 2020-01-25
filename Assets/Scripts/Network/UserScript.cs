@@ -11,11 +11,16 @@ using Debug = UnityEngine.Debug;
 
 public class UserScript : NetworkBehaviour {
     public GameObject currentStage;
+    
     public GUISkin skin;
     public string userName = "default";
+
     [SyncVar(hook = "FindLobby")] public GameObject lobby;
     public bool clicked = false;
     bool advice = true;
+
+    [SyncVar(hook = "SetHost")] public bool hosting = false;
+    [SyncVar(hook = "SetNextStage")] public int nextStage = 0;
 
     public GameObject charObject;
     public Hero myHero = null;
@@ -29,18 +34,17 @@ public class UserScript : NetworkBehaviour {
 
     void Start()
     {
-
         //lobby finding
         var tmp = GameObject.Find("Handler");
         if (isServer)
         {
             FindLobby(tmp);
-           
         }
 
         if (isLocalPlayer)
         {
-            this.name = "Me";
+            //GameObject's on scene local name
+            name = "Me";
         }
         Invoke("CancelAdvice", 5f);
     }
@@ -61,6 +65,8 @@ public class UserScript : NetworkBehaviour {
         //bool value should optimize this code
         if (!lobby.GetComponent<LobbyHandler>().heroesLoaded)
         {
+            //in this block we're iterating through directories array and read their data-files in every iteration
+            //after reading we are synchronize it with every player
             string md = "\\Characters";
             DirectoryInfo[] dirs = new DirectoryInfo(Environment.CurrentDirectory + md).GetDirectories();
             foreach (var dir in dirs)
@@ -101,6 +107,8 @@ public class UserScript : NetworkBehaviour {
                 Directory.CreateDirectory(Environment.CurrentDirectory + path);
             }
 
+            //in this block rpc method check if all characters are synchronized with each other
+            //if it is not, this block will create the same file as character's owner have on his machine
             using (FileStream fs = new FileStream(Environment.CurrentDirectory + path + "\\data.mstfrschar", FileMode.CreateNew, FileAccess.Write))
             {
                 BinaryWriter br = new BinaryWriter(fs);
@@ -136,7 +144,7 @@ public class UserScript : NetworkBehaviour {
     [ClientRpc]
     public void RpcUpdateMyHero(string path,int updID)
     {
-        Debug.Log("Trying at: " + Environment.GetFolderPath(Environment.SpecialFolder.Personal) + path);
+        //every player reads data file that were synchronized in `RpcSyncHero` method
         GameObject newHero = Hero.Load(new FileStream(Environment.CurrentDirectory + path, FileMode.Open));
         lobby.GetComponent<LobbyHandler>().Attach(newHero, updID - 1);
     }
@@ -167,7 +175,7 @@ public class UserScript : NetworkBehaviour {
 
                 if (GUI.Button(new Rect(Screen.width - MainmenuGUI.xOffset, Screen.height * 0.8f + MainmenuGUI.yOffset, 200f, 40f), "Quit"))
                 {
-                    SceneManager.LoadScene("Main menu");
+                    Application.Quit();
                 }
 
                 if (!foundChars)
@@ -178,8 +186,6 @@ public class UserScript : NetworkBehaviour {
                 //hero loading
                 if (myHero == null)
                 {
-                    //string md = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-                    //md += "\\My Games\\mistoforos";
 
                     string md = "\\Characters";
                     
@@ -196,6 +202,9 @@ public class UserScript : NetworkBehaviour {
                         
                                 heroPath += dirs[i].Name;
                                 heroPath += "\\data.mstfrschar";
+
+                        //in this block we are loading our character from directory like: 'C:\Games\Mistoforos\Characters\Sample_Character\data.mstfrschar'
+                        //after that we told the server to synchronize our choice with every player by Cmd method
 
                                 CmdUpdateMyHero(md + "\\" + heroPath, id);
                                 }
@@ -217,6 +226,16 @@ public class UserScript : NetworkBehaviour {
     void FindLobby(GameObject tmp)
     {
         lobby = tmp;
+    }
+
+    public void SetNextStage(int next)
+    {
+        nextStage = next;
+    }
+
+    public void SetHost(bool isHost)
+    {
+        hosting = isHost;
     }
 
     IEnumerator Delay()

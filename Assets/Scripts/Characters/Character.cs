@@ -11,9 +11,26 @@ public abstract class Character : MonoBehaviour
     public string charName, charSurname;
     public int level = 1;
     public int exp = 0;
+    public float maxhp, hp;
+    public float attack;
+    protected bool destroy = false;
 
+    public virtual void SaveOnDisk() {}
 
-    public abstract void SaveOnDisk();
+    public void LateUpdate()
+    {
+        if (hp <= 0 && !destroy)
+        {
+            StartCoroutine("Destroy");
+            destroy = true;
+        }
+    }
+
+    public IEnumerator Destroy()
+    {
+        yield return new WaitForSeconds(5f);
+        Destroy(this.gameObject);
+    }
 }
 
 /*

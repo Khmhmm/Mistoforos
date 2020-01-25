@@ -10,12 +10,11 @@ public class LobbyHandler : NetworkBehaviour {
     public GameObject playerPrefab;
     public List<GameObject> players;
     public int count=0;
-    public GameObject sequence;
 
     public bool heroesLoaded = false;
     public bool everyoneIsReady = false;
 
-    private bool delay = false;
+    public bool delay = false;
 
     private static float xOffset = MainmenuGUI.xOffset, yOffset = MainmenuGUI.yOffset;
 
@@ -53,6 +52,9 @@ public class LobbyHandler : NetworkBehaviour {
                     }
                 }
             }
+
+            players[0].tag = "Host";
+            players[0].GetComponent<UserScript>().SetHost(true);
         }
     }
 
@@ -111,14 +113,12 @@ public class LobbyHandler : NetworkBehaviour {
                     //current hero of the player
                     if (players[i].GetComponent<UserScript>().myHero != null) { GUI.Label(new Rect(Screen.width - xOffset - 45f, Screen.height * 0.1f + yOffset + i * 20f + 10f, Screen.width * 0.1f, 20f), players[i].GetComponent<UserScript>().myHero.charName + "," + players[i].GetComponent<UserScript>().myHero.level); }
                 }
-                catch (Exception e) {
+                catch (Exception e)
+                {
+                    //when some of the players is rejected, the program will delete him from the list and make count = 0
                     players.RemoveAt(i);
                     count = 0;
-                    foreach (var clearClick in players)
-                    {
-                        clearClick.GetComponent<UserScript>().clicked = false;
-                        heroesLoaded = false;
-                    }
+                    MakeUsersUnclicked();
                 }
             }
         }

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -20,6 +21,7 @@ public class NetworkCustomGUI : MonoBehaviour {
 
 	void OnGUI()
     {
+        //flag that hides gui when server was created or client was connected
         if(action) { return; }
 
         GUI.skin = gskin;
@@ -32,14 +34,14 @@ public class NetworkCustomGUI : MonoBehaviour {
             new Rect(Screen.width - xOffset - xOffset + 10f, Screen.height * 0.01f + yOffset, xOffset - 10f, 20f),
             "LAN HOST"))
         {
-            //network.networkAddress = hostip.ToString();
-            //network.serverBindToIP = true;
-            //network.serverBindAddress = hostip.ToString();
             network.StartHost();
             action = true;
         }
 
-        //hostip = GUI.TextField(new Rect(Screen.width - xOffset, Screen.height*0.01f + yOffset, xOffset - 10f, 20f), hostip);
+      // GUI.Label(
+      //      new Rect(Screen.width - xOffset, Screen.height * 0.01f + yOffset, xOffset - 30f, 40f),
+      //      "Number of players: ");
+      //  numPlayersField = GUI.TextField(new Rect(Screen.width - 30f, Screen.height * 0.01f + yOffset, 30f, 40f), numPlayersField);
 
         //CONNECT
         field = GUI.TextField(new Rect(Screen.width - xOffset, 250f, xOffset - 10f, 20f), field);

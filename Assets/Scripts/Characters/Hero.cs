@@ -31,6 +31,8 @@ public class Hero : Character {
         this.mage = false;
         this.skills = null;
         this.Quest = 0;
+        this.maxhp = 20f;
+        this.hp = 20f;
     }
 
     public override string ToString()
@@ -106,6 +108,10 @@ public class Hero : Character {
         ret.level = int.Parse(datas[4]);
         ret.exp = int.Parse(datas[6]);
         ret.mage = bool.Parse(datas[8]);
+        ret.maxhp = 20f + ret.level * 10f;
+        ret.hp = ret.maxhp;
+        ret.attack = 5f + ret.level * 2f;
+
         try
         {
             ret.Quest = int.Parse(datas[10]);

@@ -7,7 +7,7 @@ public class EndingStage : Stage {
     private new int nextStageIndex = 0;
 
     public string endCredits;
-    public int nextQuestID;
+    public string nextQuestCodename = "";
 
     public override string GetContent()
     {
